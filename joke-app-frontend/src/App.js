@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import './App.css';
 
 function App() {
   const [keyword, setKeyword] = useState('');
@@ -7,8 +8,8 @@ function App() {
 
   const getJoke = async () => {
     try {
-      const response = await axios.post('http://localhost:3001/get-joke', { keyword });
-      setJoke(response.data.joke);
+      const response = await axios.get('https://joke-generator-backend-ge6r.onrender.com/getJoke', { keyword });
+      setJoke(response.data);
     } catch (error) {
       console.error('Error fetching joke:', error.message);
       setJoke('Failed to fetch joke. Please try again later.');
@@ -16,7 +17,7 @@ function App() {
   };
 
   return (
-    <div>
+    <div class='container'>
       <h1>Joke App</h1>
       <input
         type="text"
