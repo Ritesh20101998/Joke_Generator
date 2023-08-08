@@ -1,45 +1,39 @@
-const express = require('express');
-const axios = require('axios');
+require("dotenv").config();
+const express = require("express");
 const app = express();
-require('dotenv').config();
-const port = process.env.port; // Choose any available port number
+const cors = require("cors");
 
-// Replace 'YOUR_CHATGPT_API_KEY' with your actual ChatGPT API key
-const chatGptApiKey = process.env.open_api_key;
+const port = process.env.port;
 
-app.use(express.json());
+app.use(cors());
+const { Configuration, OpenAIApi } = require("openai");
 
-app.get0("/",(req,res)=>{
-  res.send("Welcome to joke APP...");
+const configuration = new Configuration({
+    apiKey: process.env.open_api_key,
+});
+const openai = new OpenAIApi(configuration);
+
+app.get("/",(req,res)=>{
+    res.send("Welcome to joke APP...");
+})
+app.get("/getJoke",async(req,res)=>{
+    console.log();
+    let ans = await checkTheAns(req.query.que);
+    res.send(ans);
 })
 
-app.post('/get-joke', async (req, res) => {
-  try {
-    const { keyword } = req.body;
+        
 
-    // Fetch joke using ChatGPT API
-    const response = await axios.post(
-      'https://api.openai.com/v1/engines/davinci-codex/completions',
-      {
-        prompt: `Tell me a joke about ${keyword}`,
-        max_tokens: 50,
-      },
-      {
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${chatGptApiKey}`,
-        },
-      }
-    );
+async function checkTheAns(que){
+        const chatCompletion = await openai.createChatCompletion({
+            model: "gpt-3.5-turbo",
+            messages: [{role: "user", content:`can you tail me joke on ${que}` }]
+        });
+        responce = chatCompletion.data.choices[0].message.content
 
-    const joke = response.data.choices[0].text.trim();
-    res.json({ joke });
-  } catch (error) {
-    console.error('Error fetching joke:', error.message);
-    res.status(500).json({ error: 'Failed to fetch joke' });
-  }
-});
+        return responce;
+}
 
-app.listen(port, () => {
+app.listen(3111,()=>{
   console.log(`Server running on http://localhost:${port}`);
-});
+})
