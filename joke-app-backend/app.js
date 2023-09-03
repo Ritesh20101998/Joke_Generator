@@ -14,7 +14,7 @@ const configuration = new Configuration({
 const openai = new OpenAIApi(configuration);
 
 app.get("/",(req,res)=>{
-    res.send("Welcome to joke APP...");
+    res.send(`<h2 style="text-align:center;margin-top:40px;color:white;background: linear-gradient(to bottom, #4776e6, #8e54e9);">Welcome to Joke APP...<h2>`);
 })
 app.get("/getJoke",async(req,res)=>{
     console.log();
