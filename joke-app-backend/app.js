@@ -22,8 +22,6 @@ app.get("/getJoke",async(req,res)=>{
     res.send(ans);
 })
 
-        
-
 async function checkTheAns(que){
         const chatCompletion = await openai.createChatCompletion({
             model: "gpt-3.5-turbo",
